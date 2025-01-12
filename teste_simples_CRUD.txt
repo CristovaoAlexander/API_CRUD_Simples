@@ -1,0 +1,293 @@
+HTTP CLIENT : Biblioteca do .NET para realizar solicitações / chamadas para serviços de APIs
+pagina 164
+projeto ASP.net Core Web API ... arquitetura de MicroServiços
+CadastroApp - solution
+CadastroApp.API - projeto 1
+/Program.cs :
+classe para inicializar e executar o projeto
+Swagger : 
+Biblioteca amplamente utilizada para gerar páginas de documentação
+Controllers(IActionResult) : 
+Pasta onde são criadas as classes de controle que irão 
+gerar os serviços (ENDPOINTS)
+ENDPOINTS :
+São os endereços através do qual uma API disponibiliza algum tipo de serviço / operação
+para cada ENDPOINT devemos criar um CONTROLLER
+VERBOS / METHODS
+POST   : CREATE . incluir 
+PUT    : UPDATE . alterar / atualizar
+DELETE : DELETE . excluir
+GET    : READA  . retornar dados 
+GITHUB --> ferramenta de versionamento ... pagina 173
+camada de acesso ao banco ... pagina 182
+criando a biblioteca para tratar do acesso 
+CadastroAPP.Data
+criar pastas 
+Contexts     ... informacao da conexao
+Entities     ... entidades
+Repositories ... metodos para execucao
+Mappings     ... classes de mapeamento para o EntityFrameWork
+criar banco de dados local : BDCadastro1
+connectionString : Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=BDCadastro1;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
+CODE FIRST : Abordagem de criação de banco de dados utilizada pelo Entity Framework
+instalar a biblioteca Entity Framework
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+Microsoft.EntityFrameworkCore.Design
+CODE FIRST criar as classes de modelo de entidades para o banco de dados
+classe Pessoa : ID .. Nome
+mapearmos cada classe de entidade através do EntityFramework para criar as tabelas do banco
+ORM (Mapeamento Objeto Relacional)
+criar a classe de mapeamento na MAPPINGS
+que deve herdar a IEentityTypeConfiguration<> ... e apontar para a classe que deve ser mapeada
+implementar seus metodos
+implementar metodo Configure ... informando nome da tabela e dos campos
+Configurar a conecao do EntityFrameWork com banco : /Contexts/DataContext.cs
+que deve herdar DbContext do EntityFrameWork
+sobrescrever o metodo OnConfiguring
+configurar a string de conexao : optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BDCadastro1;Integrated Security=True;")
+sobrescrever o OnModelCreating e incluir as classes do mapeamento PessoaMap()
+executar o MIGRATION
+add-migration Initial
+... se quiser pegar o script Script-Migration
+update-database
+API REST : Padrão utilizado para construção de APIs baseados nos
+verbos HTTP (POST, PUT / PATCH, DELETE e GET)
+na API adicionar a referencia a camada de banco
+configurar ENDPOINTS para CAIXA BAIXA, na PROGRAMS.cs
+builder.Services.AddRouting(opt => opt.LowercaseUrls = true )
+... criar a classe de REPOSITORIO para o banco
+implemanter os metodos desejados
+ir na controller(IActionResult) e efetuar a achamada dos metodos criados
+DTO – DATA TRANSFER OBJECT ... objeto para transferencia de dados
+classes de modelo usadas para entrada e saida das operaçções 
+ex. criar uma classe DTO para definir quais campos da entidade serão exibidos na API
+ENTRADA : REQUEST ... dados que a API vai receber
+SAIDA : RESPONSE ... dados que a API vai retornar
+criar classes DTO de RESPONSE e REQUEST
+na controller copiar os dados do banco para o DTO de saida - RESPONSE
+AUTOMAPPER : efetuar o DE/PARA entre objetos
+instalar a biblioteca do AutoMapper na API
+na pasta MAPPINGS criar uma classe para identificar o mapeamento
+herda Profile e efetuada a injeção no método construtor -> ctor + [tab]
+informando a ligacao(mapeamento) entre a classe(Pessoa) e a classe DTO
+configurar na Program.cs o mapeamento
+informando a classe que criamos(ProfileMap.cs) no nosso projeto para fazer os mapeamentos
+builder.Services.AddAutoMapper(typeof(ProfileMap));
+configurar a injeçao de denpencia do AutoMapper na controller
+criarmos um atributo privado e readonly (só pode ser inicializado pelo método construtor da classe)
+e aplica no metodo construtor da classe
+configura no metodo desejado(GetAll) para usar o AutoMapper
+... teste do SWAGGER GETALL ... PK
+
+ANGULAR baseado em JavaScript - NodeJS ... pag 220
+@angular/cli .. CLI – Command Line Interface (terminal de linha de comandos do Angular)
+... no terminal .. GitBesh ..
+node -v    ... versão do NodeJS
+ng version ... versao do Angular
+criar um projeto Angular : ng new NomeProjeto
+abrir o projeto          : cd NomeProjeto ... vai para pasta do projeto
+                         : code .         ... abre o Visual Code 
+executar o projeto       : ng s -o
+
+retornar ao Backend ... pagina 252
+cadastro do nome
+DTO - Data Transfer Object 
+entrada (REQUESTS) e saída (RESPONSES) de dados nossa API
+configurar na controller o DTO que sera usado 
+usar o DataAnnotations para validar os dados de que entram pela API
+controle esse feito na DTO
+HTTP 400 Bad Request ... erro na informacao de campos
+usar o AutoMapper : mapear no AutoMapper quais cópias de dados queremos fazer no nosso sistema
+criar o mapeamento para a entrada de dados ... do DTO para a entidade Pessoa .. que vai para o banco
+CreateMap<PessoaRequestDTO, Pessoa>();
+na classe REPOSITORY , implementar o metodo para atualizar o banco
+public void salvar(Pessoa pessoa) ...
+HTTP 2xx (Sucesso) ... 200(ok) 201(created) 204(no content)
+     4xx (erro do cliente) ... 400(bad request) 401(unauthorized) 404(not found)
+     5xx (erro servidor, gerado pela API/beckend) ... 500(internalserver error)
+no controller usamos o AutoMapper por meio de injecao de dependencia
+volto na controller para configurar a chamada da repository
+
+Angular pagina 220 
+criar um projeto Angular : ng new CadastrarWeb
+abrir o projeto          : cd CadastrarWeb... vai para pasta do projeto
+                         : code .         ... abre o Visual Code 
+executar o projeto       : ng s -o
+
+instalar extensoes no VSCode , caso não tenha 
+Angular Language Service
+Dracula Theme
+Material Icon Theme
+configurar o AUTOSAVE
+FAST REFRESH : as alterações feitas no projeto e salvas durante a sua execução já são atualizadas automaticamente no navegador
+incluir o bootstrap : https://getbootstrap.com/ ... @import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+/styles.css
+COMPONENTES do FrontEnd
+criar um COMPONENTE para desenhar um Menu
+$ ng g c menu
+onde :
+.css     -> folha de estilo
+.html    -> conteudo HTML .. pagina
+.spec.ts -> teste do componente
+.ts      -> eventos do componente 
+inserir o componente criado no componente principal /app.component
+/app.component.ts
+Neste arquivo, vamos importar o componente ”menu” para que possamos posicioná-lo dentro da página principal
+import { MenuComponent } from './menu/menu.component';
+imports: [RouterOutlet,
+    MenuComponent
+
+corrigir identacao html : Shift + Alt + F
+/app.component.html
+Posicionar o local onde será renderizado / exibido o componente “menu”:
+
+criar componentes para CADASTRAR e CONSULTAR ... pagina 236
+ng g c cadastrar-nome
+ng g c consultar-nome
+navegacao em rotas no Angular, exibicao de componentes
+/app.routes.ts   ... arquivo para mapeamento de rotas
+
+RouterLink : criar links de navegacao 
+configura na menu.component.ts
+e na menu.component.html incluir o routerlink dos componetes criados
+
+/app.component.html
+definir onde os componentes serao renderizados .. pagina 239
+SPA - Single Page Application .. onde o Angular renderiza apenas o componente clicado(link)
+sem recarregar toda pagina, faz apenas em um pedaço da pagina
+
+HTTP Client : biblioteda do Angular para realizar chamadas/requisicoes para API
+habilitar a biblioteca no projeto no app.config.ts, incluir provideHttpClient()
+
+funcao executada assim que um componente eh executado : 
+ngOnInit(), configurado na component.ts
+
+CORS - Cross Origin Resource Sharing
+configurar na API/backend as aplicacoes que poderao ter acesso a API
+Program.cs : configurar para que o Angular acesse a API
+
+CommonModule : biblioteca de funcoes Angular para que variáveis e funções declarados no TS(TYPESCRIPT) do componente possam ser acessados e manipulados na página HTML do componente
+configurar no component.ts 
+incluir import : import { HttpClient } from '@angular/common/http';
+incluir no construtor : constructor( private httpClient: HttpClient ) {}
+
+Angular ... volta ao frontend - pagina 266
+formulariodeve caturar os dados preenchidos no formulario pelo usuario e enviar
+para o ENDPOINT pelo SUBMIT
+Formularios Reativos : bibliotecas do Angular para desenvolvimento de formulários capazes de capturar e validar campos em tempo real com o usuário
+
+cadastrar-nome.component.ts :  fazer a captura dos campos e enviar para a API
+Os campos que o nosso formulário for capturar precisam coincidir com o JSON que deverá ser enviado para o serviço da API
+imports : FormsModule e ReactiveFormsModule
+criar a estrutura do formulario
+configurar o OnSubmit, capturar o evento SUBMIT
+
+cadastrar-nome.component.html
+Conectando o conteúdo do formulário criado no arquivo typescript com a página HTML do componente.
+
+cadastrar-nome.component.ts
+configurar o envio da informacao capturada no SUBMIT para a API
+
+... na API implementar a consulta ... pagina 273
+consultas no EntitiFrameWork usando LAMBDA
+implementar a repository
+criar a classe DTO com os campos de resposta/RRESPONSE
+efetuar a copia dos dados da entidade PESSOA para a DTO Responsena ProfileMaps
+na controller criar o endpoint para consulta por ID
+ .... continuar pagina 284
+ENVIRONMENTS : criacao de “variáveis de ambiente”, variaveis globais do sistema Angular
+$ ng g environments
+environment.ts : mapear variaveis globais ... nesse caso apiPessoa 
+environment.development.ts : definir o valor da variavel declarada
+
+cadastrar-nome.component.ts .. configurar a chamada da variavel criada
+import { environment } from '../../environments/environment'; 
+substituir a chamada do endpoint da API pela variavel que guarda o valor do endereço
+this.httpClient.post('http://localhost:5093/api/pessoa'
+
+exibir as mensagens na pagina HTML
+cadastrar-nome.component.ts 
+import { environment } from '../../environments/environment'; 
+mensagem: string = ''; ... declarar o atributo
+this.mensagem = data.mensagem,
+
+cadastrar-nome.component.html
+incluir campo que deve ser exibido : mensagem
+
+criar pagina de consulta : pagina 292
+consultar-nome.component.ts 
+incluir import { FormControl, FormGroup ...
+incluir imports: [ CommonModule,  FormsModule,  ReactiveFormsModule 
+incluir funcao para capturar o submit
+incluir objeto do formulario
+form = new FormGroup
+consultar.nome.component.html
+
+consultar-nome.component.ts
+Utilizando a biblioteca HTTPCLIENT do Angular para fazermos a requisição que deverá consultar as tarefas na API
+no construtor : private httpClient: HttpClient
+criar atributo que vai receber consulta
+pessoa: any[] = [];
+incluir : import { environment } from '../../environments/environment';
+
+dentro do metodo OnSubmit pegar os valores dos campos do formulario, nesse caso campo trechoNome
+let trechoNome = this.form.value.trechoNome;
+e incluir a chamada para o endpoint de consulta
+
+incluir uma tabela na pagina HTML: consultar.nome.component.html
+
+implementar o resto dos metodos na REPOSITORY ... pagina 297
+
+CONTROLLER --- pagina 299
+implementar a chamada dos metodos da REPOSITORY na CONTROLLER
+
+exclusão ... pagina 303
+consulta-nome.component.ts 
+criar função para capturar o evento de exclusão das tarefas 
+onDelete(id: string)
+
+Na página HTML, precisamos fazer a chamada para a função de exclusão passando o ID
+consulta-nome.componente.html
+<button (click)="onDelete(t.Id)" class="btn btn-sm btn-outline-danger">Excluir</button> 
+
+editar pessoa ... pagina 308
+criar um componente para editar-nome
+$ ng g c editar-nome            
+mapear rotas para navegarmos para a página
+app.routes.ts
+import { EditarNomeComponent } from './editar-nome/editar-nome.component';  
+
+Na página de consulta pessoa, vamos fazer um LINK (utilizando a biblioteca RouterLink do Angular) para navegar para a página de edição.
+consultar-pessoa.component.ts
+imports: RouterLink
+
+criar o link de navegação na página HTML no botao EDITAR
+consultar-pessoa.component.html
+<button [routerLink]="['/app/editar-pessoa',t.id]" class="btn btn-sm btn-outline-primary me-2">Editar</button> 
+
+desenhar pagina de edicao
+editar-pessoa.component.html
+
+configurar : editar-pessoa.component.ts
+imports ...
+criar o formGroup
+atributos
+metodo construtor : httpclient , activatedRouter
+estrutura do formulario : campos usados (nome)
+
+funcao ao iniciar componente e preencher com dados na tela
+funcao do botão ngOnInit()
+
+funcao onSubmit para atualizar os dados
+
+
+
+
+
+
+
+
+
+

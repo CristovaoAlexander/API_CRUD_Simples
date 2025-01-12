@@ -1,0 +1,81 @@
+Para adicionar dois botões de pesquisa diferentes, você pode criar dois botões button ao invés de um único submit, cada um chamando um método de pesquisa distinto na classe do componente Angular. Abaixo está uma adaptação do seu código:
+
+<div class="card">
+    <div class="card-body">
+        <h4>Pesquisa de tarefas</h4>
+        <p>Informe o nome para consultar.</p>
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" formControlName="trechoNome" />
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-success" (click)="pesquisarPorNome()">Pesquisar por Nome</button>
+                    <button type="button" class="btn btn-primary" (click)="pesquisarPorId()">Pesquisar por ID</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive mt-3">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let t of pessoa">
+                        <td>{{ t.nome }}</td>
+                        <td>{{ t.id }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-2">Editar</button>
+                            <button class="btn btn-sm btn-outline-danger">Excluir</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6"> Quantidade de tarefas: {{ pessoa.length }} </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+Explicação
+Botão Pesquisar por Nome: o botão verde chama o método pesquisarPorNome() para realizar uma pesquisa baseada no nome.
+Botão Pesquisar por ID: o botão azul chama o método pesquisarPorId() para realizar uma pesquisa baseada no ID.
+Código do Componente (TypeScript)
+Agora, adicione os métodos pesquisarPorNome e pesquisarPorId na sua classe do componente:
+
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
+@Component({
+  selector: 'app-pesquisa-tarefas',
+  templateUrl: './pesquisa-tarefas.component.html'
+})
+export class PesquisaTarefasComponent {
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({
+      trechoNome: ['']
+    });
+  }
+
+  pesquisarPorNome() {
+    const nome = this.form.get('trechoNome')?.value;
+    console.log('Pesquisar por Nome:', nome);
+    // Lógica de pesquisa por nome
+  }
+
+  pesquisarPorId() {
+    const id = this.form.get('trechoNome')?.value;
+    console.log('Pesquisar por ID:', id);
+    // Lógica de pesquisa por ID
+  }
+}
+
