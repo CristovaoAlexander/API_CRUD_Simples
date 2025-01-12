@@ -1,4 +1,4 @@
-# Teste WebCrawler
+# API de CRUD simples com Angular
 
 Este projeto API para efetuar um CRUD.
 
